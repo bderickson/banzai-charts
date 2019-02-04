@@ -41,10 +41,31 @@ cluster:
   port: 10900
 
 objstore:
-  provider: gcs
   configFile: "bucket.yaml"
+  provider: gcs
+
+  # NOTE These values are present for backwards compatibility, but should
+  # be removed at some later date in favor of gcs.credentials and
+  # gcs.bucketName below.
   bucketName: ""
   gcsCredentials: ""
+
+  gcs:
+    credentials: ""
+    bucketName: ""
+
+  s3:
+    accessKey: ""
+    secretKey: ""
+    bucketName: ""
+    endpoint: ""
+    insecure: false
+    signatureVersion2: false
+    encryptSse: false
+    putUserMetadata: {}
+    httpConfig:
+      idleConnTimeout: 0s
+      insecureSkipVerify: false
 
 replicaLabelName: replica
 

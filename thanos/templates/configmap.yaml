@@ -9,6 +9,24 @@ metadata:
     heritage: "{{ .Release.Service }}"
 data:
   {{ .Values.objstore.configFile }}: |
-    type: GCS
+    type: {{ .Values.objstore.provider | upper }}
     config:
+    {{- if eq .Values.objstore.provider "gcs" }}
+      {{- if ne .Values.objstore.gcs.bucketName "" }}
+      bucket: {{ .Values.objstore.gcs.bucketName }}
+      {{- else }}
       bucket: {{ .Values.objstore.bucketName }}
+      {{- end }}
+    {{- else if eq .Values.objstore.provider "s3" }}
+      access_key: {{ .Values.objstore.s3.accessKey }}
+      secret_key: {{ .Values.objstore.s3.secretKey }}
+      bucket: {{ .Values.objstore.s3.bucketName }}
+      endpoint: {{ .Values.objstore.s3.endpoint }}
+      insecure: {{ .Values.objstore.s3.insecure }}
+      signature_version2: {{ .Values.objstore.s3.signatureVersion2 }}
+      encrypt_sse: {{ .Values.objstore.s3.encryptSse }}
+      put_user_metadata: {{ .Values.objstore.s3.putUserMetadata | toYaml }}
+      http_config:
+        idle_conn_timeout: {{ .Values.objstore.s3.httpConfig.idleConnTimeout }}
+        insecure_skip_verify: {{ .Values.objstore.s3.httpConfig.insecureSkipVerify }}
+    {{- end }}

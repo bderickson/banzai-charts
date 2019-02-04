@@ -35,8 +35,25 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
+        {{- if eq .Values.objstore.provider "gcs" }}
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /credentials/google.json
+        {{- else if eq .Values.objstore.provider "s3" }}
+        {{- if ne .Values.objstore.s3.accessKey "" }}
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "thanos.fullname" . }}
+              key: aws_access_key_id
+        {{- end }}
+        {{- if ne .Values.objstore.s3.secretKey "" }}
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "thanos.fullname" . }}
+              key: aws_secret_access_key
+        {{- end }}
+        {{- end }}
         args:
         - "store"
         - "--log.level={{ .Values.store.logLevel }}"
@@ -55,7 +72,7 @@ spec:
         - name: config-volume
           mountPath: /etc/config
           readOnly: true
-        {{ if eq .Values.objstore.provider "gcs" }}
+        {{- if eq .Values.objstore.provider "gcs" }}
         - name: {{ .Values.objstore.provider }}
           mountPath: /credentials
         {{- end }}
