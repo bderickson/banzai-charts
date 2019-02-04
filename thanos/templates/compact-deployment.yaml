@@ -28,6 +28,9 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "{{ .Values.compact.http.port }}"
       {{ end }}
+      {{- range $name, $value := .Values.compact.extraAnnotations }}
+        {{ $name }}: {{ $value }}
+      {{- end }}
     spec:
       containers:
       - name: thanos-compact

@@ -29,6 +29,9 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "{{ .Values.store.http.port }}"
       {{ end }}
+      {{- range $name, $value := .Values.store.extraAnnotations }}
+        {{ $name }}: {{ $value }}
+      {{- end }}
     spec:
       containers:
       - name: thanos-store

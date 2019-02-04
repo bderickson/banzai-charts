@@ -28,6 +28,9 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "{{ .Values.query.http.port}}"
       {{ end }}
+      {{- range $name, $value := .Values.query.extraAnnotations }}
+        {{ $name }}: {{ $value }}
+      {{- end }}
     spec:
       containers:
       - name: thanos-query

@@ -16,6 +16,7 @@ store:
   grpc:
     port: 10901
   logLevel: debug
+  extraAnnotations: {}
 
 query:
   enabled: true
@@ -27,6 +28,7 @@ query:
   http:
     port: 10902
   logLevel: debug
+  extraAnnotations: {}
 
 compact:
   enabled: true
@@ -35,6 +37,7 @@ compact:
   http:
     port: 10902
   logLevel: debug
+  extraAnnotations: {}
 
 cluster:
   address: 0.0.0.0
