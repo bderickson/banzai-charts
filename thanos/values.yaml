@@ -35,6 +35,10 @@ compact:
   http:
     port: 10902
   logLevel: debug
+  retention:
+    raw: 30d
+    5m: 120d
+    1h: 10y
 
 cluster:
   address: 0.0.0.0
